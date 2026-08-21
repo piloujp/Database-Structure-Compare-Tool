@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Postal Code Atumatic plugin documentation</title>
+  </head>
+  <body>
+    <h1 style=" text-align: center;">Database Structure Compare Tool</h1>
+    <p> </p>
+    <p style="margin-left: 20px;"><i>Database Structure Compare Tool</i> is an
+      encapsulated plugin for Zen Cart v2.1.0 and above that allows you to <b>compare</b>
+      two databases <b>structures</b>. This can be very useful when doing some
+      database upgrade or trouble shooting ZC or plugins installation that
+      modify database.<br>
+      <b style="color: #cc0000;">Important:</b> <span style="color: #990000;">To
+        use this plugin, your database user must have <b>access</b> to the <b>information_schema
+          table</b> which might not be the case on some hosting. Please check
+        before downloading.</span><br>
+      After you choose a database to compare yours to, columns differences will
+      be displayed with a color code and highlight on the difference.
+      Optionally, you can although display tables names that are not shared by
+      both databases.<br>
+      <br>
+    </p>
+    <h3 style="margin-left: 40px;">INSTALL:</h3>
+    <p style="margin-left: 80px;"><b>Copy zc_plugins folder content</b> to the
+      zc_plugins folder in your cart. Then go to Zen Cart <b>admin menu <code>Modules-&gt;Plugin
+          Manager</code></b>. You should now see <i>Database Structure Compare
+        Tool</i> in the plugin list. <b>Click on <i>Install</i></b> button on
+      the right as many times as necessary and you are done. </p>
+    <p style="margin-left: 80px;"> </p>
+    <h3 style="margin-left: 40px;">USAGE:</h3>
+    <p style="margin-left: 80px;">Choose a database to compare yours to in the
+      drop down menu. As soon as it is done results will appear below.<br>
+      Note: The drop down menu will only list databases your user has access
+      too.<br>
+      If some tables are only present in one of the databases, then a large
+      button will appear&nbsp; below the drop down, for each of the databases.
+      Clicking on it will display the list of tables only found in this
+      database. </p>
+    <p style="margin-left: 80px;"> </p>
+    <h3 style="margin-left: 40px;">UNINSTALL:</h3>
+    <p style="margin-left: 80px;">Like for installation, use Zen Cart's <b>Plugin
+        Manager</b> in admin: <code>Modules-&gt;Plugin Manager</code>. You can
+      either disable the plugin or uninstall it. <b>Disable</b> option will
+      just deactivate the plugin but deletes nothing. <b>Uninstall</b> will
+      remove configuration keys from the database and deactivate the plugin.</p>
+  </body>
+</html>
