@@ -10,10 +10,16 @@ require 'includes/application_top.php';
 
 global $db;
 
+$firstDatabase = DB_DATABASE;
+$secondDatabase = (isset($_GET['database']) ? substr(zen_db_prepare_input($_GET['database']), 0) : '');
+$sortOrder = ($secondDatabase > $firstDatabase) ? 'ASC' : 'DESC' ;
+$tablesDb1 = [];
+$tablesDb2 = [];
+
 $Databases_Query = "SELECT schema_name FROM information_schema.schemata ORDER BY schema_name;";
 $result_databases = $db->Execute($Databases_Query);
 
-$excluded_databases = ['information_schema', 'performance_schema', 'mysql'];
+$excluded_databases = ['information_schema', 'performance_schema', 'mysql', $firstDatabase];
 $database_list[] = ['id' => '', 'text' => TEXT_SELECT_AN_OPTION];
 foreach ($result_databases as $database) {
     if (!in_array($database["SCHEMA_NAME"], $excluded_databases, true)) {
@@ -22,12 +28,6 @@ foreach ($result_databases as $database) {
 }
 //array_walk($database_list, function(&$item, $key) {$item['id'] = $key + 1;});
 //var_dump($database_list);
-
-$firstDatabase = DB_DATABASE;
-$secondDatabase = (isset($_GET['database']) ? substr(zen_db_prepare_input($_GET['database']), 0) : '');
-$sortOrder = ($secondDatabase > $firstDatabase) ? 'ASC' : 'DESC' ;
-$tablesDb1 = [];
-$tablesDb2 = [];
 
 if (!empty($firstDatabase) && !empty($secondDatabase)) {
     $sql_tables_db1 = "SELECT DISTINCT table_name FROM information_schema.columns WHERE table_schema = :firstDatabase ORDER BY table_name;";
@@ -239,9 +239,9 @@ if (!empty($commonTables)) {
     foreach ($commonTables as $commonTable) {
 
         $sql = "SELECT DB, TABLE_NAME, COLUMN_NAME, COLUMN_DEFAULT, IS_NULLABLE, COLLATION_NAME, COLUMN_TYPE FROM
-        ( SELECT TABLE_SCHEMA as DB, TABLE_NAME, COLUMN_NAME, COLUMN_DEFAULT, IS_NULLABLE, COLLATION_NAME, COLUMN_TYPE FROM information_schema.COLUMNS WHERE
+        ( SELECT MIN(TABLE_SCHEMA) as DB, TABLE_NAME, COLUMN_NAME, COLUMN_DEFAULT, IS_NULLABLE, COLLATION_NAME, COLUMN_TYPE FROM information_schema.COLUMNS WHERE
         ( (TABLE_SCHEMA = :firstDatabase AND TABLE_NAME = :tableName) OR (TABLE_SCHEMA = :secondDatabase AND TABLE_NAME = :tableName) )
-        GROUP BY COLUMN_NAME, COLUMN_DEFAULT, IS_NULLABLE, COLLATION_NAME, COLUMN_TYPE HAVING COUNT(1)=1 ) as A
+        GROUP BY TABLE_NAME, COLUMN_NAME, COLUMN_DEFAULT, IS_NULLABLE, COLLATION_NAME, COLUMN_TYPE HAVING COUNT(1)=1 ) as A
         ORDER BY TABLE_NAME, COLUMN_NAME, DB :sortOrder ";
         $sql = $db->bindVars($sql, ':firstDatabase', $firstDatabase, 'string');
         $sql = $db->bindVars($sql, ':secondDatabase', $secondDatabase, 'string');
